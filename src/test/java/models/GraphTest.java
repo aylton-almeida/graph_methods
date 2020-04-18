@@ -113,4 +113,32 @@ class GraphTest {
         assertFalse(this.graph2.isNull(), "should return that graph is not null");
     }
 
+    @Test
+    void hasLoops() {
+        this.graph.addEdgeFromString("1;2;4");
+        this.graph.addEdgeFromString("1;1;6");
+
+        this.graph2.addEdgeFromString("1;2;4");
+        this.graph2.addEdgeFromString("1;3;6");
+
+        assertTrue(this.graph.hasLoops(), "should return that graph has loop(s)");
+        assertFalse(this.graph2.hasLoops(), "should return that graph does not have any loops");
+    }
+
+    @Test
+    void hasParallelEdges() {
+        this.graph.addEdgeFromString("1;2;4");
+        this.graph.addEdgeFromString("1;2;6");
+        this.graph.addEdgeFromString("2;3;6");
+
+
+        this.graph2.addEdgeFromString("1;2;4");
+        this.graph2.addEdgeFromString("1;3;6");
+        this.graph.addEdgeFromString("2;3;1");
+
+        assertTrue(this.graph.hasParallelEdges(), "should return that graph has parallel edge(s)");
+        assertFalse(this.graph2.hasParallelEdges(), "should return that graph does not have any parallel edge(s)");
+    }
+
+
 }

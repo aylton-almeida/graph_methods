@@ -1,7 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -107,6 +106,73 @@ public class Graph {
      */
     public boolean isNull() {
         return this.edges.isEmpty();
+    }
+
+    /**
+     * Returns if the graph has loops or not
+     *
+     * @return if the graph has loops or not
+     */
+    boolean hasLoops() {
+        boolean hasLoops = false;
+        for (Edge edge : this.edges) {
+            if (edge.vertices.get(0).equals(edge.vertices.get(1))) {
+                hasLoops = true;
+                break;
+            }
+        }
+        return hasLoops;
+    }
+
+    /**
+     * Returns if the graph has parallel edges or not
+     *
+     * @return if the graph has parallel edges or not
+     */
+    boolean hasParallelEdges() {
+        boolean hasParallelEdges = false;
+        // for each edge, check if there is another edge linking its vertices
+        List<Edge> filteredEdges = new ArrayList<>(this.edges);
+        int loopCount = 0;
+        for (Edge testEdge : this.edges) {
+            // check if current tested edge exists in remaining edges
+            if (loopCount != 0) {
+                filteredEdges.clear();
+                filteredEdges.addAll(this.edges);
+            }
+            filteredEdges.remove(testEdge);
+            for (Edge edge : filteredEdges) {
+                if (edge.equalsIgnoreWeight(testEdge)) {
+                    hasParallelEdges = true;
+                    break;
+                }
+            }
+            loopCount++;
+        }
+        return hasParallelEdges;
+    }
+
+    /**
+     * Returns if the graph is simple or not
+     *
+     * @return if the graph is simple or not
+     */
+    public boolean isSimple() {
+        return !this.hasLoops() && !this.hasParallelEdges();
+    }
+
+    /**
+     * Returns if the graph is complete or not
+     *
+     * @return if the graph is complete or not
+     */
+    public boolean isComplete() {
+        if (!this.isSimple()) {
+            return false;
+        } else {
+            //todo is complete
+            return true;
+        }
     }
 
     @Override
