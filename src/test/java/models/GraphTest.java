@@ -8,11 +8,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class GraphTest {
     Graph graph;
     Graph graph2;
+    Graph graph3;
+    Graph graph4;
 
     @BeforeEach
     void setUp() {
         this.graph = new Graph(3);
         this.graph2 = new Graph(3);
+        this.graph3 = new Graph(3);
+        this.graph4 = new Graph(3);
     }
 
     @Test
@@ -131,13 +135,37 @@ class GraphTest {
         this.graph.addEdgeFromString("1;2;6");
         this.graph.addEdgeFromString("2;3;6");
 
-
         this.graph2.addEdgeFromString("1;2;4");
         this.graph2.addEdgeFromString("1;3;6");
         this.graph.addEdgeFromString("2;3;1");
 
         assertTrue(this.graph.hasParallelEdges(), "should return that graph has parallel edge(s)");
         assertFalse(this.graph2.hasParallelEdges(), "should return that graph does not have any parallel edge(s)");
+    }
+
+    @Test
+    void isSimple() {
+        this.graph.addEdgeFromString("1;2;4");
+        this.graph.addEdgeFromString("1;1;6");
+
+        this.graph2.addEdgeFromString("1;2;4");
+        this.graph2.addEdgeFromString("1;2;6");
+        this.graph2.addEdgeFromString("2;3;6");
+
+        this.graph3.addEdgeFromString("1;2;4");
+        this.graph3.addEdgeFromString("1;1;6");
+        this.graph3.addEdgeFromString("1;2;4");
+        this.graph3.addEdgeFromString("1;2;6");
+        this.graph3.addEdgeFromString("2;3;6");
+
+        this.graph4.addEdgeFromString("1;2;4");
+        this.graph4.addEdgeFromString("2;3;6");
+        this.graph4.addEdgeFromString("3;1;2");
+
+        assertFalse(this.graph.isSimple(), "should return that graph is not simple because it has loop(s)");
+        assertFalse(this.graph2.isSimple(), "should return that graph is not simple because it has parallel edge(s)");
+        assertFalse(this.graph3.isSimple(), "should return that graph is not simple because it has loop(s) and parallel edge(s)");
+        assertTrue(this.graph4.isSimple(), "should return that graph is simple");
     }
 
 
