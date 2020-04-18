@@ -19,10 +19,12 @@ public class Graph {
      * @param edgeString edge string
      */
     public void addEdgeFromString(String edgeString) {
-        Edge newEdge = new Edge(edgeString);
-        if (!this.edges.contains(newEdge))
-            this.edges.add(new Edge(edgeString));
+        this.edges.add(new Edge(edgeString));
         this.updateVertices();
+    }
+
+    public void addIsolatedVertice(Vertice v1) {
+        if (!this.vertices.contains(v1)) this.vertices.add(v1);
     }
 
     /**
@@ -32,6 +34,40 @@ public class Graph {
         this.edges.forEach(e -> e.vertices.forEach(v -> {
             if (!this.vertices.contains(v)) this.vertices.add(v);
         }));
+    }
+
+    /**
+     * Tests if two vertices are adjacent or not
+     *
+     * @param v1 first vertice
+     * @param v2 second vertice
+     * @return if they are adjacent or not
+     */
+    public boolean isAdjacent(Vertice v1, Vertice v2) {
+        Edge testEdge = new Edge(v1, v2);
+        boolean isAdjacent = false;
+        for (Edge edge : edges)
+            if (testEdge.equalsIgnoreWeight(edge)) {
+                isAdjacent = true;
+                break;
+            }
+        return isAdjacent;
+    }
+
+    /**
+     * Returns the degree for the given vertice
+     *
+     * @param v1 vertice to be analyzed
+     * @return vertice degree or -1 if vertice is not part of the graph
+     */
+    int getDegree(Vertice v1) {
+        return this.vertices.contains(v1)
+                ? (int) this.edges.stream().filter(edge -> edge.vertices.contains(v1)).count()
+                : -1;
+    }
+
+    boolean isIsolated(Vertice v1) {
+        return this.getDegree(v1) == 0;
     }
 
     @Override

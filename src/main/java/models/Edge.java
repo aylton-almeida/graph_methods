@@ -1,15 +1,16 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class Edge {
-    final List<Vertice> vertices = new ArrayList<>();   //Should never be bigger than 2
+    final List<Vertice> vertices = new ArrayList<>(); // Should never be bigger than 2
     final double weight;
 
     /**
-     * Create edge from values
+     * Creates edge from values
      *
      * @param weight Value needed to run the edge
      * @param v1     first vertice
@@ -22,7 +23,19 @@ public class Edge {
     }
 
     /**
-     * Create edge from file string
+     * Creates edge from two vertices
+     *
+     * @param v1 first vertice
+     * @param v2 second vertice
+     */
+    Edge(Vertice v1, Vertice v2) {
+        this.vertices.add(v1);
+        this.vertices.add(v2);
+        this.weight = 0;
+    }
+
+    /**
+     * Creates edge from file string
      *
      * @param fileString String from file
      */
@@ -33,13 +46,40 @@ public class Edge {
         this.weight = Double.parseDouble(strings[2]);
     }
 
+    /**
+     * Compares two edges and says if they are equal
+     *
+     * @param o edge to be compared to
+     * @return if the edges are equal
+     */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Edge edge = (Edge) o;
-        return Double.compare(edge.weight, weight) == 0 &&
-                vertices.equals(edge.vertices);
+        boolean isNormalOrderEqual = vertices.equals(edge.vertices);
+        Collections.reverse(vertices);
+        boolean isReverseOrderEqual = vertices.equals(edge.vertices);
+        return Double.compare(edge.weight, weight) == 0 && (isNormalOrderEqual || isReverseOrderEqual);
+    }
+
+    /**
+     * Compares two edges and says if they are equal ignoring their weight
+     *
+     * @param e edge to be compared to
+     * @return if the edges are equal ignoring their weight
+     */
+    public boolean equalsIgnoreWeight(Edge e) {
+        if (this == e)
+            return true;
+        if (e == null)
+            return false;
+        boolean isNormalOrderEqual = vertices.equals(e.vertices);
+        Collections.reverse(vertices);
+        boolean isReverseOrderEqual = vertices.equals(e.vertices);
+        return isNormalOrderEqual || isReverseOrderEqual;
     }
 
     @Override
@@ -49,9 +89,6 @@ public class Edge {
 
     @Override
     public String toString() {
-        return "Edge{" +
-                "vertices=" + vertices +
-                ", weight=" + weight +
-                '}';
+        return "Edge{" + "vertices=" + vertices + ", weight=" + weight + '}';
     }
 }

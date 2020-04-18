@@ -31,8 +31,49 @@ class GraphTest {
 
         this.graph.addEdgeFromString("1;3;2");
         assertEquals(new Edge(2, 1, 3), this.graph.edges.get(1), "Should have a new edge connected to v1 and v3");
+    }
 
-        this.graph.addEdgeFromString("1;3;2");
-        assertEquals(new Edge(2, 1, 3), this.graph.edges.get(1), "Should not add repeated edge");
+    @Test
+    void isAdjacent() {
+        this.graph.addEdgeFromString("1;2;4");
+        this.graph.addEdgeFromString("1;3;4");
+
+        assertTrue(this.graph.isAdjacent(new Vertice(1), new Vertice(2)), "should return that vertices<1,2> are adjacent");
+        assertTrue(this.graph.isAdjacent(new Vertice(2), new Vertice(1)), "should return that vertices<2,1> are adjacent");
+        assertTrue(this.graph.isAdjacent(new Vertice(1), new Vertice(3)), "should return that vertices<1,3> are adjacent");
+        assertFalse(this.graph.isAdjacent(new Vertice(3), new Vertice(2)), "should return that vertices are not adjacent");
+    }
+
+    @Test
+    void getDegree() {
+        this.graph.addEdgeFromString("1;2;0");
+        this.graph.addEdgeFromString("1;3;0");
+        this.graph.addEdgeFromString("1;3;0");
+        this.graph.addIsolatedVertice(new Vertice(5));
+
+        assertEquals(this.graph.getDegree(new Vertice(1)), 3, "should return degree 3");
+        assertEquals(this.graph.getDegree(new Vertice(2)), 1, "should return degree 1");
+        assertEquals(this.graph.getDegree(new Vertice(5)), 0, "should return degree 0");
+        assertEquals(this.graph.getDegree(new Vertice(4)), -1, "should return vertice is not part of graph");
+
+    }
+
+    @Test
+    void isIsolated() {
+        this.graph.addEdgeFromString("1;2;0");
+        this.graph.addIsolatedVertice(new Vertice(3));
+
+        assertFalse(this.graph.isIsolated(new Vertice(1)), "should return vertice1 is not isolated");
+        assertFalse(this.graph.isIsolated(new Vertice(5)), "should return vertice2 is not isolated");
+        assertTrue(this.graph.isIsolated(new Vertice(3)), "should return that vertice is isolated");
+    }
+
+    @Test
+    void addIsolatedVertice(){
+        this.graph.addIsolatedVertice(new Vertice(1));
+
+        assertTrue(this.graph.vertices.contains(new Vertice(1)), "should return that it contains the vertice");
+        assertTrue(this.graph.isIsolated(new Vertice(1)), "should return that the vertice is isolated");
+
     }
 }
