@@ -105,4 +105,12 @@ class GraphTest {
         assertFalse(this.graph2.isRegular(), "should return that graph is not regular");
     }
 
+    @Test
+    void isNull() {
+        this.graph2.addEdgeFromString("1;2;4");
+
+        assertTrue(this.graph.isNull(), "should return that graph is null");
+        assertFalse(this.graph2.isNull(), "should return that graph is not null");
+    }
+
 }

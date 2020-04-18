@@ -100,6 +100,15 @@ public class Graph {
         return isRegular;
     }
 
+    /**
+     * Returns if the graph is null or not
+     *
+     * @return if the graph is null or not
+     */
+    public boolean isNull() {
+        return this.edges.isEmpty();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
