@@ -76,4 +76,15 @@ class GraphTest {
         assertTrue(this.graph.isIsolated(new Vertice(1)), "should return that the vertice is isolated");
 
     }
+
+    @Test
+    void isPending() {
+        this.graph.addEdgeFromString("1;2;4");
+        this.graph.addEdgeFromString("1;3;7");
+        this.graph.addEdgeFromString("2;3;10");
+        this.graph.addEdgeFromString("4;2;3");
+
+        assertFalse(this.graph.isPending(new Vertice(1)), "should return that vertice is not pending");
+        assertTrue(this.graph.isPending(new Vertice(4)), "should return that vertice is pending");
+    }
 }

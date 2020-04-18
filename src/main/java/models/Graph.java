@@ -70,6 +70,16 @@ public class Graph {
         return this.getDegree(v1) == 0;
     }
 
+    /**
+     * Returns if the vertice is pending or not
+     *
+     * @param v1 vertice to be analyzed
+     * @return if vertice is pending or not
+     */
+    public boolean isPending(Vertice v1) {
+        return this.getDegree(v1) == 1;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

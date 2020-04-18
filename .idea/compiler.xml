@@ -9,5 +9,8 @@
         <module name="grafos-trabalho-1" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="grafos-trabalho-1" target="14" />
+    </bytecodeTargetLevel>
   </component>
 </project>
