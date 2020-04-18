@@ -168,5 +168,30 @@ class GraphTest {
         assertTrue(this.graph4.isSimple(), "should return that graph is simple");
     }
 
+    @Test
+    void isComplete() {
+        this.graph.addEdgeFromString("1;2;4");
+        this.graph.addEdgeFromString("2;3;6");
+        this.graph.addEdgeFromString("3;1;2");
+
+        this.graph2.addEdgeFromString("1;2;2");
+        this.graph2.addEdgeFromString("2;3;2");
+        this.graph2.addEdgeFromString("3;4;2");
+        this.graph2.addEdgeFromString("4;1;2");
+        this.graph2.addEdgeFromString("1;3;2");
+        this.graph2.addEdgeFromString("2;4;2");
+
+        this.graph3.addEdgeFromString("1;2;4");
+        this.graph3.addEdgeFromString("1;1;6");
+
+        this.graph4.addEdgeFromString("1;2;4");
+        this.graph4.addEdgeFromString("1;2;6");
+        this.graph4.addEdgeFromString("2;3;6");
+
+        assertTrue(this.graph.isComplete(), "should return that graph is complete");
+        assertTrue(this.graph2.isComplete(), "should return that graph is complete");
+        assertFalse(this.graph3.isComplete(), "should return that graph is not complete");
+        assertFalse(this.graph4.isComplete(), "should return that graph is not complete");
+    }
 
 }

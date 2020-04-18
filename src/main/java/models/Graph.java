@@ -167,12 +167,27 @@ public class Graph {
      * @return if the graph is complete or not
      */
     public boolean isComplete() {
-        if (!this.isSimple()) {
-            return false;
-        } else {
-            //todo is complete
+        // for each vertice, check if it is adjacent to all other vertices
+        if (this.isSimple()) {
+            List<Vertice> filteredVertices = new ArrayList<>(this.vertices);
+            int loopCount = 0;
+            for (Vertice testVertice : this.vertices) {
+                // check if current tested edge is adjacent in remaining vertices
+                if (loopCount != 0) {
+                    filteredVertices.clear();
+                    filteredVertices.addAll(this.vertices);
+                }
+                filteredVertices.remove(testVertice);
+                for (Vertice vertice : filteredVertices) {
+                    if (!this.isAdjacent(testVertice, vertice)) {
+                        return false;
+                    }
+                }
+                loopCount++;
+            }
             return true;
         }
+        return false;
     }
 
     @Override
