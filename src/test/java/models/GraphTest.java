@@ -7,10 +7,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GraphTest {
     Graph graph;
+    Graph graph2;
 
     @BeforeEach
     void setUp() {
         this.graph = new Graph(3);
+        this.graph2 = new Graph(3);
     }
 
     @Test
@@ -87,4 +89,20 @@ class GraphTest {
         assertFalse(this.graph.isPending(new Vertice(1)), "should return that vertice is not pending");
         assertTrue(this.graph.isPending(new Vertice(4)), "should return that vertice is pending");
     }
+
+    @Test
+    void isRegular() {
+        this.graph.addEdgeFromString("1;2;4");
+        this.graph.addEdgeFromString("1;3;7");
+        this.graph.addEdgeFromString("2;3;10");
+
+        this.graph2.addEdgeFromString("1;2;4");
+        this.graph2.addEdgeFromString("1;3;7");
+        this.graph2.addEdgeFromString("2;3;10");
+        this.graph2.addEdgeFromString("4;2;3");
+
+        assertTrue(this.graph.isRegular(), "should return that graph is regular");
+        assertFalse(this.graph2.isRegular(), "should return that graph is not regular");
+    }
+
 }

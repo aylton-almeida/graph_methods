@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -78,6 +79,25 @@ public class Graph {
      */
     public boolean isPending(Vertice v1) {
         return this.getDegree(v1) == 1;
+    }
+
+    /**
+     * Returns if the graph is regular or not
+     *
+     * @return if the graph is regular or not
+     */
+    public boolean isRegular() {
+        List<Integer> degrees = new ArrayList<>();
+        this.vertices.forEach(vertice -> degrees.add(this.getDegree(vertice)));
+        boolean isRegular = true;
+        int firstDegree = degrees.get(0);
+        for (int degree : degrees) {
+            if (degree != firstDegree) {
+                isRegular = false;
+                break;
+            }
+        }
+        return isRegular;
     }
 
     @Override
