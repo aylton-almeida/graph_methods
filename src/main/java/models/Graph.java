@@ -59,6 +59,9 @@ public class Graph {
         }));
     }
 
+    /**
+     * Update adjacency list
+     */
     public void updateAdjList(int source, int destination) {
         this.adjList[source - 1].addFirst(destination - 1);
         this.adjList[destination - 1].addFirst(source - 1);
@@ -218,15 +221,18 @@ public class Graph {
         return false;
     }
 
+    /**
+     * Depth-first search
+     */
     void DFS(int source, LinkedList<Integer> adjList [], boolean[] visited){
 
-        //mark the vertex visited
+        //mark the vertice as visited
         visited[source] = true;
 
         //travel the neighbors
         for (int i = 0; i <adjList[source].size() ; i++) {
             int neighbor = adjList[source].get(i);
-            if(visited[neighbor]==false){
+            if(!visited[neighbor]){
                 //make recursive call from neighbor
                 DFS(neighbor, adjList, visited);
             }
@@ -245,7 +251,7 @@ public class Graph {
         //created visited array
         boolean[] visited = new boolean[vertices];
 
-        //start the DFS from vertex 0
+        //start the DFS from vertice 0
         DFS(0, adjList, visited);
 
         //check if all the vertices are visited, if yes then graph is connected
