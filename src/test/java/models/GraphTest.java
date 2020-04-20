@@ -13,14 +13,16 @@ class GraphTest {
 
     @BeforeEach
     void setUp() {
-        this.graph = new Graph(10);
-        this.graph2 = new Graph(10);
-        this.graph3 = new Graph(10);
-        this.graph4 = new Graph(10);
+        this.graph = new Graph(3);
+        this.graph2 = new Graph(3);
+        this.graph3 = new Graph(3);
+        this.graph4 = new Graph(3);
     }
 
     @Test
     void updateVertices() {
+        this.graph.setVerticesNumber(2);
+
         assertEquals(this.graph.vertices.size(), 0, "should't have any vertices at the start");
 
         this.graph.addEdgeFromString("1;2;4");
@@ -30,6 +32,7 @@ class GraphTest {
 
     @Test
     void addEdgeFromString() {
+        this.graph.setVerticesNumber(3);
         assertEquals(0, this.graph.edges.size(), "Should have no edge");
 
         this.graph.addEdgeFromString("1;2;4");
@@ -41,6 +44,8 @@ class GraphTest {
 
     @Test
     void isAdjacent() {
+        this.graph.setVerticesNumber(3);
+
         this.graph.addEdgeFromString("1;2;4");
         this.graph.addEdgeFromString("1;3;4");
 
@@ -52,6 +57,8 @@ class GraphTest {
 
     @Test
     void getDegree() {
+        this.graph.setVerticesNumber(4);
+
         this.graph.addEdgeFromString("1;2;0");
         this.graph.addEdgeFromString("1;3;0");
         this.graph.addEdgeFromString("1;3;0");
@@ -66,6 +73,8 @@ class GraphTest {
 
     @Test
     void isIsolated() {
+        this.graph.setVerticesNumber(2);
+
         this.graph.addEdgeFromString("1;2;0");
         this.graph.addIsolatedVertice(new Vertice(3));
 
@@ -76,6 +85,8 @@ class GraphTest {
 
     @Test
     void addIsolatedVertice(){
+        this.graph.setVerticesNumber(1);
+
         this.graph.addIsolatedVertice(new Vertice(1));
 
         assertTrue(this.graph.vertices.contains(new Vertice(1)), "should return that it contains the vertice");
@@ -85,6 +96,8 @@ class GraphTest {
 
     @Test
     void isPending() {
+        this.graph.setVerticesNumber(4);
+
         this.graph.addEdgeFromString("1;2;4");
         this.graph.addEdgeFromString("1;3;7");
         this.graph.addEdgeFromString("2;3;10");
@@ -96,6 +109,9 @@ class GraphTest {
 
     @Test
     void isRegular() {
+        this.graph.setVerticesNumber(3);
+        this.graph2.setVerticesNumber(4);
+
         this.graph.addEdgeFromString("1;2;4");
         this.graph.addEdgeFromString("1;3;7");
         this.graph.addEdgeFromString("2;3;10");
@@ -111,6 +127,9 @@ class GraphTest {
 
     @Test
     void isNull() {
+        this.graph.setVerticesNumber(0);
+        this.graph2.setVerticesNumber(2);
+
         this.graph2.addEdgeFromString("1;2;4");
 
         assertTrue(this.graph.isNull(), "should return that graph is null");
@@ -119,6 +138,9 @@ class GraphTest {
 
     @Test
     void hasLoops() {
+        this.graph.setVerticesNumber(2);
+        this.graph2.setVerticesNumber(3);
+
         this.graph.addEdgeFromString("1;2;4");
         this.graph.addEdgeFromString("1;1;6");
 
@@ -131,6 +153,9 @@ class GraphTest {
 
     @Test
     void hasParallelEdges() {
+        this.graph.setVerticesNumber(3);
+        this.graph2.setVerticesNumber(3);
+
         this.graph.addEdgeFromString("1;2;4");
         this.graph.addEdgeFromString("1;2;6");
         this.graph.addEdgeFromString("2;3;6");
@@ -145,6 +170,11 @@ class GraphTest {
 
     @Test
     void isSimple() {
+        this.graph.setVerticesNumber(2);
+        this.graph2.setVerticesNumber(3);
+        this.graph3.setVerticesNumber(3);
+        this.graph4.setVerticesNumber(3);
+
         this.graph.addEdgeFromString("1;2;4");
         this.graph.addEdgeFromString("1;1;6");
 
@@ -170,6 +200,11 @@ class GraphTest {
 
     @Test
     void isComplete() {
+        this.graph.setVerticesNumber(3);
+        this.graph2.setVerticesNumber(4);
+        this.graph3.setVerticesNumber(2);
+        this.graph4.setVerticesNumber(3);
+
         this.graph.addEdgeFromString("1;2;4");
         this.graph.addEdgeFromString("2;3;6");
         this.graph.addEdgeFromString("3;1;2");
@@ -196,6 +231,9 @@ class GraphTest {
 
     @Test
     void isConnected() {
+        this.graph.setVerticesNumber(6);
+        this.graph2.setVerticesNumber(8);
+
         this.graph.addEdgeFromString("1;2;4");
         this.graph.addEdgeFromString("1;3;6");
         this.graph.addEdgeFromString("2;3;2");

@@ -6,10 +6,18 @@ import java.util.List;
 import java.util.Objects;
 
 public class Graph {
-    final int verticesNumber;
+    int verticesNumber;
     final List<Vertice> vertices = new ArrayList<>();
     final List<Edge> edges = new ArrayList<>();
     LinkedList<Integer>[] adjList;
+
+    public void setVerticesNumber(int verticesNumber) {
+        this.verticesNumber = verticesNumber;
+        this.adjList = new LinkedList[verticesNumber];
+        for (int i = 0; i < verticesNumber; i++) {
+            adjList[i] = new LinkedList<>();
+        }
+    }
 
     public Graph(int verticesNumber) {
         this.verticesNumber = verticesNumber;
