@@ -13,10 +13,10 @@ class GraphTest {
 
     @BeforeEach
     void setUp() {
-        this.graph = new Graph(3);
-        this.graph2 = new Graph(3);
-        this.graph3 = new Graph(3);
-        this.graph4 = new Graph(3);
+        this.graph = new Graph(10);
+        this.graph2 = new Graph(10);
+        this.graph3 = new Graph(10);
+        this.graph4 = new Graph(10);
     }
 
     @Test
@@ -193,5 +193,28 @@ class GraphTest {
         assertFalse(this.graph3.isComplete(), "should return that graph is not complete");
         assertFalse(this.graph4.isComplete(), "should return that graph is not complete");
     }
+
+    @Test
+    void isConnected() {
+        this.graph.addEdgeFromString("1;2;4");
+        this.graph.addEdgeFromString("1;3;6");
+        this.graph.addEdgeFromString("2;3;2");
+        this.graph.addEdgeFromString("3;4;4");
+        this.graph.addEdgeFromString("4;5;6");
+        this.graph.addEdgeFromString("4;5;2");
+        this.graph.addEdgeFromString("5;6;2");
+
+        this.graph2.addEdgeFromString("1;2;4");
+        this.graph2.addEdgeFromString("2;3;6");
+        this.graph2.addEdgeFromString("4;4;2");
+        this.graph2.addEdgeFromString("5;6;4");
+        this.graph2.addEdgeFromString("6;8;6");
+        this.graph2.addEdgeFromString("8;7;2");
+        this.graph2.addEdgeFromString("7;5;2");
+
+        assertTrue(this.graph.isConnected(), "should return that graph is connected");
+        assertFalse(this.graph2.isConnected(), "should return that graph is not connected");
+    }
+
 
 }

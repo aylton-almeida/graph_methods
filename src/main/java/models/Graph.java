@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,9 +9,23 @@ public class Graph {
     final int verticesNumber;
     final List<Vertice> vertices = new ArrayList<>();
     final List<Edge> edges = new ArrayList<>();
+    LinkedList<Integer>[] adjList;
 
     public Graph(int verticesNumber) {
         this.verticesNumber = verticesNumber;
+        adjList = new LinkedList[verticesNumber];
+        for (int i = 0; i < verticesNumber; i++) {
+            adjList[i] = new LinkedList<>();
+        }
+    }
+
+    Edge formatEdgeString(String edgeString) {
+        String[] strings = edgeString.split(";");
+        int v1 = Integer.parseInt(strings[0].strip());
+        int v2 = Integer.parseInt(strings[1].strip());
+        double weight = Double.parseDouble(strings[2]);
+        this.updateAdjList(v1, v2);
+        return new Edge(weight, v1, v2);
     }
 
     /**
@@ -19,7 +34,7 @@ public class Graph {
      * @param edgeString edge string
      */
     public void addEdgeFromString(String edgeString) {
-        this.edges.add(new Edge(edgeString));
+        this.edges.add(formatEdgeString(edgeString));
         this.updateVertices();
     }
 
@@ -34,6 +49,11 @@ public class Graph {
         this.edges.forEach(e -> e.vertices.forEach(v -> {
             if (!this.vertices.contains(v)) this.vertices.add(v);
         }));
+    }
+
+    public void updateAdjList(int source, int destination) {
+        this.adjList[source - 1].addFirst(destination - 1);
+        this.adjList[destination - 1].addFirst(source - 1);
     }
 
     /**
@@ -188,6 +208,45 @@ public class Graph {
             return true;
         }
         return false;
+    }
+
+    void DFS(int source, LinkedList<Integer> adjList [], boolean[] visited){
+
+        //mark the vertex visited
+        visited[source] = true;
+
+        //travel the neighbors
+        for (int i = 0; i <adjList[source].size() ; i++) {
+            int neighbor = adjList[source].get(i);
+            if(visited[neighbor]==false){
+                //make recursive call from neighbor
+                DFS(neighbor, adjList, visited);
+            }
+        }
+    }
+
+    /**
+     * Returns if the graph is connected or not
+     *
+     * @return if the graph is connected or not
+     */
+    public boolean isConnected() {
+        int vertices = this.vertices.size();
+        LinkedList<Integer> adjList [] = this.adjList;
+
+        //created visited array
+        boolean[] visited = new boolean[vertices];
+
+        //start the DFS from vertex 0
+        DFS(0, adjList, visited);
+
+        //check if all the vertices are visited, if yes then graph is connected
+        int count = 0;
+        for (boolean b : visited) {
+            if (b)
+                count++;
+        }
+        return vertices == count;
     }
 
     @Override
