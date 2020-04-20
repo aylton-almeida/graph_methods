@@ -54,6 +54,7 @@ public class Graph {
         return isAdjacent;
     }
 
+
     /**
      * Returns the degree for the given vertice
      *
@@ -69,6 +70,39 @@ public class Graph {
     boolean isIsolated(Vertice v1) {
         return this.getDegree(v1) == 0;
     }
+
+
+    boolean isEuleriano() {
+        boolean resp = true;
+        if (isConexo() == true) {
+            for (int i = 0; i < verticesNumber; i++) {
+                if (this.getDegree(this.i) % 2 == 1) {
+                    resp = false;
+                }
+            }
+
+        }
+        // if (isGrafoNulo()) {
+        //   resp = false;
+        //  }
+        return resp;
+    }
+
+    boolean isUnicursal() {
+        //Conexo e com exatamente 2 vértices de grau ímpar.
+        boolean resp = true;
+        int cont = 0;
+        for (int i = 0; i < verticesNumber; i++) {
+            if (getDegree(i) % 2 != 0)
+                cont++;
+        }
+        if (cont != 2 || isConexo() == false) {
+            resp = false;
+        }
+
+        return resp;
+    }
+
 
     @Override
     public boolean equals(Object o) {
