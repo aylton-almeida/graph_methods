@@ -46,6 +46,11 @@ public class Graph {
         this.updateVertices();
     }
 
+    /**
+     * Add isolated vertice
+     *
+     * @param v1 vertice to be added
+     */
     public void addIsolatedVertice(Vertice v1) {
         if (!this.vertices.contains(v1)) this.vertices.add(v1);
     }
