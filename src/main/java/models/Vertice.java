@@ -14,6 +14,10 @@ public class Vertice {
         this.name = "v" + number;
     }
 
+    int getValue() {
+        return Integer.parseInt(this.name.replace("v", "").trim());
+    }
+
     /**
      * Creates a fake vertice
      */

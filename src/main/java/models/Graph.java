@@ -3,14 +3,19 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Graph {
-    final int verticesNumber;
+    int verticesNumber;
     final List<Vertice> vertices = new ArrayList<>();
     final List<Edge> edges = new ArrayList<>();
 
-    public Graph(int verticesNumber) {
+    public void setVerticesNumber(int verticesNumber) {
         this.verticesNumber = verticesNumber;
+    }
+
+    public Graph(int verticesNumber) {
+        this.setVerticesNumber(verticesNumber);
     }
 
     /**
@@ -73,6 +78,173 @@ public class Graph {
 
     boolean isIsolated(Vertice v1) {
         return this.getDegree(v1) == 0;
+    }
+
+    /**
+     * Returns if the vertice is pending or not
+     *
+     * @param v1 vertice to be analyzed
+     * @return if vertice is pending or not
+     */
+    public boolean isPending(Vertice v1) {
+        return this.getDegree(v1) == 1;
+    }
+
+    /**
+     * Returns if the graph is regular or not
+     *
+     * @return if the graph is regular or not
+     */
+    public boolean isRegular() {
+        List<Integer> degrees = new ArrayList<>();
+        this.vertices.forEach(vertice -> degrees.add(this.getDegree(vertice)));
+        boolean isRegular = true;
+        int firstDegree = degrees.get(0);
+        for (int degree : degrees) {
+            if (degree != firstDegree) {
+                isRegular = false;
+                break;
+            }
+        }
+        return isRegular;
+    }
+
+    /**
+     * Returns if the graph is null or not
+     *
+     * @return if the graph is null or not
+     */
+    public boolean isNull() {
+        return this.edges.isEmpty();
+    }
+
+    /**
+     * Returns if the graph has loops or not
+     *
+     * @return if the graph has loops or not
+     */
+    boolean hasLoops() {
+        boolean hasLoops = false;
+        for (Edge edge : this.edges) {
+            if (edge.vertices.get(0).equals(edge.vertices.get(1))) {
+                hasLoops = true;
+                break;
+            }
+        }
+        return hasLoops;
+    }
+
+    /**
+     * Returns if the graph has parallel edges or not
+     *
+     * @return if the graph has parallel edges or not
+     */
+    boolean hasParallelEdges() {
+        boolean hasParallelEdges = false;
+        // for each edge, check if there is another edge linking its vertices
+        List<Edge> filteredEdges = new ArrayList<>(this.edges);
+        int loopCount = 0;
+        for (Edge testEdge : this.edges) {
+            // check if current tested edge exists in remaining edges
+            if (loopCount != 0) {
+                filteredEdges.clear();
+                filteredEdges.addAll(this.edges);
+            }
+            filteredEdges.remove(testEdge);
+            for (Edge edge : filteredEdges) {
+                if (edge.equalsIgnoreWeight(testEdge)) {
+                    hasParallelEdges = true;
+                    break;
+                }
+            }
+            loopCount++;
+        }
+        return hasParallelEdges;
+    }
+
+    /**
+     * Returns if the graph is simple or not
+     *
+     * @return if the graph is simple or not
+     */
+    public boolean isSimple() {
+        return !this.hasLoops() && !this.hasParallelEdges();
+    }
+
+    /**
+     * Returns if the graph is complete or not
+     *
+     * @return if the graph is complete or not
+     */
+    public boolean isComplete() {
+        // for each vertice, check if it is adjacent to all other vertices
+        if (this.isSimple()) {
+            List<Vertice> filteredVertices = new ArrayList<>(this.vertices);
+            int loopCount = 0;
+            for (Vertice testVertice : this.vertices) {
+                // check if current tested edge is adjacent in remaining vertices
+                if (loopCount != 0) {
+                    filteredVertices.clear();
+                    filteredVertices.addAll(this.vertices);
+                }
+                filteredVertices.remove(testVertice);
+                for (Vertice vertice : filteredVertices) {
+                    if (!this.isAdjacent(testVertice, vertice)) {
+                        return false;
+                    }
+                }
+                loopCount++;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Depth-first search
+     */
+    void DepthFirstSearch(int source, boolean[] visited){
+
+        //mark the vertice as visited
+        visited[source] = true;
+
+        List<Vertice> adjList = this.edges
+                .stream()
+                .filter(e -> e.vertices.get(0)
+                        .equals(this.vertices.get(source))
+                )
+                .map(e -> e.vertices.get(1))
+                .collect(Collectors.toList());
+
+        for (Vertice v : adjList) {
+            int index = v.getValue() - 1;
+            if(!visited[index]){
+                //make recursive call from neighbor
+                DepthFirstSearch(index, visited);
+            }
+        }
+    }
+
+    /**
+     * Returns if the graph is connected or not
+     *
+     * @return if the graph is connected or not
+     */
+    public boolean isConnected() {
+        int vertices = this.vertices.size();
+
+        //created visited array
+        boolean[] visited = new boolean[vertices];
+
+        DepthFirstSearch(0, visited);
+
+        //check if all the vertices are visited, if yes then graph is connected
+        int count = 0;
+        for (boolean b : visited) {
+            if (b)
+                count++;
+        }
+        return vertices == count;
     }
 
     @Override
