@@ -9,13 +9,48 @@ public class Graph {
     int verticesNumber;
     final List<Vertice> vertices = new ArrayList<>();
     final List<Edge> edges = new ArrayList<>();
+//    MinimumSpanningTree minimumSpanningTree;
+    int[][] adjMatrix;
 
     public void setVerticesNumber(int verticesNumber) {
         this.verticesNumber = verticesNumber;
     }
 
+//    public MinimumSpanningTree getMinimumSpanningTree(Vertice v1) {
+//        this.minimumSpanningTree = new MinimumSpanningTree(this.getAdjMatrix(), v1);
+//        return this.minimumSpanningTree;
+//    }
+
     public Graph(int verticesNumber) {
         this.setVerticesNumber(verticesNumber);
+        adjMatrix = new int[verticesNumber][verticesNumber];
+    }
+
+    public int[][] getAdjMatrix() {
+        return this.adjMatrix;
+    }
+
+    void addEdgeToAdjMatrix(Edge e) {
+        adjMatrix[e.vertices.get(0).getValue() - 1][e.vertices.get(1).getValue() - 1] = 1;
+        adjMatrix[e.vertices.get(1).getValue() - 1][e.vertices.get(0).getValue() - 1] = 1;
+    }
+
+    public void printAdjMatrix() {
+        StringBuilder s = new StringBuilder();
+
+        System.out.print("   ");
+        for (int i = 0; i < verticesNumber; i++)
+            System.out.print(i + " ");
+        System.out.println("");
+
+        for (int i = 0; i < verticesNumber; i++) {
+            s.append(i + ": ");
+            for (int j : adjMatrix[i]) {
+                s.append((j == 1?1:0) + " ");
+            }
+            s.append("\n");
+        }
+        System.out.println(s.toString());
     }
 
     /**
@@ -24,7 +59,9 @@ public class Graph {
      * @param edgeString edge string
      */
     public void addEdgeFromString(String edgeString) {
-        this.edges.add(new Edge(edgeString));
+        Edge e = new Edge(edgeString);
+        this.edges.add(e);
+        this.addEdgeToAdjMatrix(e);
         this.updateVertices();
     }
 
