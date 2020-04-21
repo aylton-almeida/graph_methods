@@ -1,39 +1,21 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Graph {
     int verticesNumber;
     final List<Vertice> vertices = new ArrayList<>();
     final List<Edge> edges = new ArrayList<>();
-    LinkedList<Integer>[] adjList;
 
     public void setVerticesNumber(int verticesNumber) {
         this.verticesNumber = verticesNumber;
-        this.adjList = new LinkedList[verticesNumber];
-        for (int i = 0; i < verticesNumber; i++) {
-            adjList[i] = new LinkedList<>();
-        }
     }
 
     public Graph(int verticesNumber) {
-        this.verticesNumber = verticesNumber;
-        adjList = new LinkedList[verticesNumber];
-        for (int i = 0; i < verticesNumber; i++) {
-            adjList[i] = new LinkedList<>();
-        }
-    }
-
-    Edge formatEdgeString(String edgeString) {
-        String[] strings = edgeString.split(";");
-        int v1 = Integer.parseInt(strings[0].strip());
-        int v2 = Integer.parseInt(strings[1].strip());
-        double weight = Double.parseDouble(strings[2]);
-        this.updateAdjList(v1, v2);
-        return new Edge(weight, v1, v2);
+        this.setVerticesNumber(verticesNumber);
     }
 
     /**
@@ -42,7 +24,7 @@ public class Graph {
      * @param edgeString edge string
      */
     public void addEdgeFromString(String edgeString) {
-        this.edges.add(formatEdgeString(edgeString));
+        this.edges.add(new Edge(edgeString));
         this.updateVertices();
     }
 
@@ -62,14 +44,6 @@ public class Graph {
         this.edges.forEach(e -> e.vertices.forEach(v -> {
             if (!this.vertices.contains(v)) this.vertices.add(v);
         }));
-    }
-
-    /**
-     * Update adjacency list
-     */
-    public void updateAdjList(int source, int destination) {
-        this.adjList[source - 1].addFirst(destination - 1);
-        this.adjList[destination - 1].addFirst(source - 1);
     }
 
     /**
@@ -229,17 +203,24 @@ public class Graph {
     /**
      * Depth-first search
      */
-    void DFS(int source, LinkedList<Integer> adjList [], boolean[] visited){
+    void DepthFirstSearch(int source, boolean[] visited){
 
         //mark the vertice as visited
         visited[source] = true;
 
-        //travel the neighbors
-        for (int i = 0; i <adjList[source].size() ; i++) {
-            int neighbor = adjList[source].get(i);
-            if(!visited[neighbor]){
+        List<Vertice> adjList = this.edges
+                .stream()
+                .filter(e -> e.vertices.get(0)
+                        .equals(this.vertices.get(source))
+                )
+                .map(e -> e.vertices.get(1))
+                .collect(Collectors.toList());
+
+        for (Vertice v : adjList) {
+            int index = v.getValue() - 1;
+            if(!visited[index]){
                 //make recursive call from neighbor
-                DFS(neighbor, adjList, visited);
+                DepthFirstSearch(index, visited);
             }
         }
     }
@@ -251,13 +232,11 @@ public class Graph {
      */
     public boolean isConnected() {
         int vertices = this.vertices.size();
-        LinkedList<Integer> adjList [] = this.adjList;
 
         //created visited array
         boolean[] visited = new boolean[vertices];
 
-        //start the DFS from vertice 0
-        DFS(0, adjList, visited);
+        DepthFirstSearch(0, visited);
 
         //check if all the vertices are visited, if yes then graph is connected
         int count = 0;

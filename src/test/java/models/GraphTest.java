@@ -228,6 +228,7 @@ class GraphTest {
         assertFalse(this.graph4.isComplete(), "should return that graph is not complete");
     }
 
+    // it will not work unless vertices count start on 1 (v1, v2, v3...) instead of (v0, v1, v2...)
     @Test
     void isConnected() {
         this.graph.setVerticesNumber(6);
