@@ -1,13 +1,14 @@
 package models;
 
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 public class Graph {
     final int verticesNumber;
     final List<Vertice> vertices = new ArrayList<>();
     final List<Edge> edges = new ArrayList<>();
+    LinkedList<Integer>[] adjList;
 
     public Graph(int verticesNumber) {
         this.verticesNumber = verticesNumber;
@@ -67,40 +68,58 @@ public class Graph {
                 : -1;
     }
 
+
+
+
+
+    /**
+     * Returns true or false
+     *
+     * @return true if the graph is eurelian  or false
+     * if the graph is not eurelian
+     */
+    public boolean isEulerian() {
+
+        for (Vertice vertice : vertices) {
+            if (getDegree(vertice) % 2 != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     boolean isIsolated(Vertice v1) {
         return this.getDegree(v1) == 0;
     }
 
 
-    boolean isEuleriano() {
-        boolean resp = true;
-        if (isConexo() == true) {
-            for (int i = 0; i < verticesNumber; i++) {
-                if (this.getDegree(this.i) % 2 == 1) {
-                    resp = false;
-                }
+    /**
+     * @return
+     */
+    public boolean isUnicursal() {
+        int cont = 0;
+        for (Vertice vertice : vertices) {
+            if (getDegree(vertice) % 2 != 0) {
+                cont++;
             }
-
         }
-        // if (isGrafoNulo()) {
-        //   resp = false;
-        //  }
-        return resp;
+        return cont == 2;
     }
 
-    boolean isUnicursal() {
-        //Conexo e com exatamente 2 vértices de grau ímpar.
-        boolean resp = true;
-        int cont = 0;
-        for (int i = 0; i < verticesNumber; i++) {
-            if (getDegree(i) % 2 != 0)
-                cont++;
-        }
-        if (cont != 2 || isConexo() == false) {
-            resp = false;
+    public Graph getComplementar() {
+        Graph graph2 = new Graph(verticesNumber);
+
+        for (Vertice vertice : vertices) {
+            for (Vertice vertice1 : vertices) {
+
+                if (isAdjacent(vertice, vertice1) != true && vertice != vertice1) {
+                    graph2.addEdgeFromString("vertice;vertice1");
+                }
+            }
         }
 
-        return resp;
+        return graph2;
     }
 
 
