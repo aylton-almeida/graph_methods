@@ -76,4 +76,29 @@ class GraphTest {
         assertTrue(this.graph.isIsolated(new Vertice(1)), "should return that the vertice is isolated");
 
     }
+
+    @Test
+    void isEulerian(){
+
+        this.graph.addEdgeFromString("1;2;0");
+        this.graph.addEdgeFromString("1;3;0");
+
+
+       assertTrue(this.graph.isEulerian(), "should return that graph is Eulerian");
+        assertFalse(this.graph.isEulerian(), "should return that graph is not Eulerian");
+
+    }
+
+    @Test
+    void isUnicursal(){
+
+        this.graph.addEdgeFromString("1;2;0");
+        this.graph.addEdgeFromString("1;3;0");
+
+        assertTrue(this.graph.isUnicursal(), "should return that graph is Eulerian");
+        assertFalse(this.graph.isUnicursal(), "should return that graph is not unicursal");
+
+    }
+
+
 }
