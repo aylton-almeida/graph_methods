@@ -10,6 +10,12 @@ public class Edge {
     final double weight;
 
     /**
+     * Default Constructor
+     * @param weight Value needed to run the edge
+     */
+    Edge(Double weight) {this.weight = weight;}
+
+    /**
      * Creates edge from values
      *
      * @param weight Value needed to run the edge

@@ -14,6 +14,13 @@ public class Vertice {
         this.name = "v" + number;
     }
 
+    /**
+     * Creates a fake vertice
+     */
+    Vertice() {
+        this.name = "v-1";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

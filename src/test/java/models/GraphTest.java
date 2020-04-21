@@ -10,7 +10,7 @@ class GraphTest {
 
     @BeforeEach
     void setUp() {
-        this.graph = new Graph(3);
+        this.graph = new Graph(5);
     }
 
     @Test
@@ -55,7 +55,6 @@ class GraphTest {
         assertEquals(this.graph.getDegree(new Vertice(2)), 1, "should return degree 1");
         assertEquals(this.graph.getDegree(new Vertice(5)), 0, "should return degree 0");
         assertEquals(this.graph.getDegree(new Vertice(4)), -1, "should return vertice is not part of graph");
-
     }
 
     @Test
