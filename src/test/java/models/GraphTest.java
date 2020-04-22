@@ -83,7 +83,7 @@ class GraphTest {
     }
 
     @Test
-    void addIsolatedVertice(){
+    void addIsolatedVertice() {
         this.graph.setVerticesNumber(1);
 
         this.graph.addIsolatedVertice(new Vertice(1));
@@ -292,6 +292,7 @@ class GraphTest {
         this.graph.addEdgeFromString("1;3;6");
         this.graph.addEdgeFromString("2;3;2");
         this.graph.addEdgeFromString("3;4;4");
+        this.graph.addEdgeFromString("3;6;4");
         this.graph.addEdgeFromString("4;5;6");
         this.graph.addEdgeFromString("4;5;2");
         this.graph.addEdgeFromString("5;6;2");
@@ -308,5 +309,23 @@ class GraphTest {
         assertFalse(this.graph2.isConnected(), "should return that graph is not connected");
     }
 
+    @Test
+    void getCutVertices() {
+        this.graph.setVerticesNumber(5);
+        this.graph2.setVerticesNumber(4);
 
+        this.graph.addEdgeFromString("1;2;0");
+        this.graph.addEdgeFromString("1;3;0");
+        this.graph.addEdgeFromString("2;3;0");
+        this.graph.addEdgeFromString("3;4;0");
+        this.graph.addEdgeFromString("4;5;0");
+
+        assertEquals(2, this.graph.getCutVertices());
+
+        this.graph2.addEdgeFromString("1;2;5");
+        this.graph2.addEdgeFromString("3;2;5");
+        this.graph2.addEdgeFromString("3;4;5");
+
+        assertEquals(2, this.graph.getCutVertices());
+    }
 }

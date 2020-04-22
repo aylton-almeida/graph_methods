@@ -69,6 +69,23 @@ public class Graph {
     }
 
     /**
+     * Removes vertices from graph
+     *
+     * @param v vertice to be removed
+     * @return list of edges removed
+     */
+    List<Edge> removeVertice(Vertice v) {
+        List<Edge> toBeRemovedEdges = new ArrayList<>();
+        for (Edge e : this.edges) {
+            if (e.vertices.contains(v)) {
+                toBeRemovedEdges.add(e);
+            }
+        }
+        this.edges.removeAll(toBeRemovedEdges);
+        return toBeRemovedEdges;
+    }
+
+    /**
      * Update vertices list
      */
     public void updateVertices() {
@@ -122,7 +139,12 @@ public class Graph {
         return true;
     }
 
-
+    /**
+     * Returns if the vertice is isolated in this graph
+     *
+     * @param v1 vertice to be tested
+     * @return true or false accordingly
+     */
     boolean isIsolated(Vertice v1) {
         return this.getDegree(v1) == 0;
     }
@@ -284,22 +306,23 @@ public class Graph {
     /**
      * Depth-first search
      */
-    void DepthFirstSearch(int source, boolean[] visited){
+    void DepthFirstSearch(int source, boolean[] visited) {
 
         //mark the vertice as visited
         visited[source] = true;
 
         List<Vertice> adjList = this.edges
                 .stream()
-                .filter(e -> e.vertices.get(0)
-                        .equals(this.vertices.get(source))
-                )
-                .map(e -> e.vertices.get(1))
+                .filter(e -> e.vertices.contains(this.vertices.get(source)))
+                .map(e -> {
+                    int i = e.vertices.indexOf(this.vertices.get(source));
+                    return i == 0 ? e.vertices.get(1) : e.vertices.get(0);
+                })
                 .collect(Collectors.toList());
 
         for (Vertice v : adjList) {
-            int index = v.getValue() - 1;
-            if(!visited[index]){
+            int index = this.vertices.indexOf(v);
+            if (!visited[index]) {
                 //make recursive call from neighbor
                 DepthFirstSearch(index, visited);
             }
@@ -312,10 +335,8 @@ public class Graph {
      * @return if the graph is connected or not
      */
     public boolean isConnected() {
-        int vertices = this.vertices.size();
-
         //created visited array
-        boolean[] visited = new boolean[vertices];
+        boolean[] visited = new boolean[verticesNumber];
 
         DepthFirstSearch(0, visited);
 
@@ -325,7 +346,27 @@ public class Graph {
             if (b)
                 count++;
         }
-        return vertices == count;
+        return verticesNumber == count;
+    }
+
+    /**
+     * Get the number of cut vertices in the graph
+     *
+     * @return the number of cut vertices
+     */
+    int getCutVertices() {
+        int countVertices = 0;
+        for (int i = 0; i < this.vertices.size(); i++) {
+            Vertice v = this.vertices.get(i);
+            List<Edge> removedEdges = this.removeVertice(v);
+            this.setVerticesNumber(--verticesNumber);
+            this.vertices.remove(v);
+            if (!this.isConnected()) countVertices++;
+            this.edges.addAll(removedEdges);
+            this.setVerticesNumber(++verticesNumber);
+            this.vertices.add(0, v);
+        }
+        return countVertices;
     }
 
     @Override
