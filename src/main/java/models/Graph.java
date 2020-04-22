@@ -16,21 +16,25 @@ public class Graph {
         this.verticesNumber = verticesNumber;
     }
 
-    public void printMinimumSpanningTree() {
-        this.minimumSpanningTree = new MinimumSpanningTree(this.getAdjMatrix());
-    }
-
-    public void printMinimumSpanningTree(int v1) {
-        this.minimumSpanningTree = new MinimumSpanningTree(this.getAdjMatrix(), this.vertices.get(v1).getValue());
-    }
-
     public Graph(int verticesNumber) {
         this.setVerticesNumber(verticesNumber);
         adjMatrix = new int[verticesNumber][verticesNumber];
     }
 
-    public int[][] getAdjMatrix() {
-        return this.adjMatrix;
+    // print minimum spanning tree - kruskal's algorithm
+    public void printMinimumSpanningTree() {
+        if (this.isConnected())
+            this.minimumSpanningTree = new MinimumSpanningTree(this.adjMatrix);
+        else
+            System.out.println("Cannot print MST - Kruskal because the graph is not connected");
+    }
+
+    // print minimum spanning tree - prim's algorithm
+    public void printMinimumSpanningTree(int v1) {
+        if (this.isConnected())
+            this.minimumSpanningTree = new MinimumSpanningTree(this.adjMatrix, this.vertices.get(v1).getValue());
+        else
+            System.out.println("Cannot print MST - Prim because the graph is not connected");
     }
 
     void addEdgeToAdjMatrix(Edge e) {
@@ -38,6 +42,7 @@ public class Graph {
         adjMatrix[e.vertices.get(1).getValue() - 1][e.vertices.get(0).getValue() - 1] = e.weight;
     }
 
+    // utility function to print adjacency matrix
     public void printAdjMatrix() {
         StringBuilder s = new StringBuilder();
 
