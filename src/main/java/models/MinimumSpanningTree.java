@@ -29,7 +29,7 @@ public class MinimumSpanningTree {
             System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
     }
 
-    // A utility function to find the vertex with minimum key value, from the set of vertices not yet included in MST
+    // A utility function to find the vertice with minimum key value, from the set of vertices not yet included in MST
     int minKey(int[] key, boolean[] mstSet) {
         int min = Integer.MAX_VALUE;
         int min_index = -1;
