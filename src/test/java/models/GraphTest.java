@@ -69,7 +69,7 @@ class GraphTest {
     }
 
     @Test
-    void addIsolatedVertice(){
+    void addIsolatedVertice() {
         this.graph.addIsolatedVertice(new Vertice(1));
 
         assertTrue(this.graph.vertices.contains(new Vertice(1)), "should return that it contains the vertice");
@@ -77,27 +77,57 @@ class GraphTest {
     }
 
     @Test
-    void isEulerian(){
-
+    void isEulerian() {
         this.graph.addEdgeFromString("1;2;0");
         this.graph.addEdgeFromString("1;3;0");
+        this.graph.addEdgeFromString("2;3;0");
 
+        assertTrue(this.graph.isEulerian(), "should return that graph is Eulerian");
 
-       assertTrue(this.graph.isEulerian(), "should return that graph is Eulerian");
+        this.graph.addEdgeFromString("2;4;0");
         assertFalse(this.graph.isEulerian(), "should return that graph is not Eulerian");
-
     }
 
     @Test
-    void isUnicursal(){
-
+    void isUnicursal() {
         this.graph.addEdgeFromString("1;2;0");
         this.graph.addEdgeFromString("1;3;0");
+        this.graph.addEdgeFromString("1;4;0");
+        this.graph.addEdgeFromString("2;4;0");
+        this.graph.addEdgeFromString("3;4;0");
+        this.graph.addEdgeFromString("5;4;0");
+        this.graph.addEdgeFromString("5;2;0");
 
-        assertTrue(this.graph.isUnicursal(), "should return that graph is Eulerian");
-        assertFalse(this.graph.isUnicursal(), "should return that graph is not unicursal");
+        assertTrue(this.graph.isUnicursal(), "should return that graph is Unicursal");
 
+        this.graph.addEdgeFromString("3;4;0");
+
+        assertFalse(this.graph.isUnicursal(), "should return that graph is not Unicursal");
     }
 
+    @Test
+    void getComplementary() {
+        this.graph.setVerticesNumber(6);
+        this.graph.addEdgeFromString("1;2;0");
+        this.graph.addEdgeFromString("2;3;0");
+        this.graph.addEdgeFromString("3;4;0");
+        this.graph.addEdgeFromString("4;5;0");
+        this.graph.addEdgeFromString("5;6;0");
+        this.graph.addEdgeFromString("6;1;0");
 
+        Graph expectedGraph = new Graph(6);
+        expectedGraph.addEdgeFromString("1;3;0");
+        expectedGraph.addEdgeFromString("1;4;0");
+        expectedGraph.addEdgeFromString("1;5;0");
+        expectedGraph.addEdgeFromString("2;4;0");
+        expectedGraph.addEdgeFromString("2;5;0");
+        expectedGraph.addEdgeFromString("2;6;0");
+        expectedGraph.addEdgeFromString("3;5;0");
+        expectedGraph.addEdgeFromString("3;6;0");
+        expectedGraph.addEdgeFromString("4;6;0");
+
+        Graph actualGraph = this.graph.getComplementary();
+
+        assertEquals(expectedGraph, actualGraph);
+    }
 }
