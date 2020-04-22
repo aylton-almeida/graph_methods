@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class Edge {
+public class Edge implements Comparable<Edge> {
     final List<Vertice> vertices = new ArrayList<>(); // Should never be bigger than 2
     final int weight;
 
@@ -86,6 +86,10 @@ public class Edge {
         Collections.reverse(vertices);
         boolean isReverseOrderEqual = vertices.equals(e.vertices);
         return isNormalOrderEqual || isReverseOrderEqual;
+    }
+
+    public int compareTo(Edge compareEdge) {
+        return this.weight - compareEdge.weight;
     }
 
     @Override

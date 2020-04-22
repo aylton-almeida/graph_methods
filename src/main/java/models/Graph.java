@@ -24,7 +24,7 @@ public class Graph {
     // print minimum spanning tree - kruskal's algorithm
     public void printMinimumSpanningTree() {
         if (this.isConnected())
-            this.minimumSpanningTree = new MinimumSpanningTree(this.adjMatrix);
+            this.minimumSpanningTree = new MinimumSpanningTree(this);
         else
             System.out.println("Cannot print MST - Kruskal because the graph is not connected");
     }

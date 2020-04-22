@@ -1,11 +1,18 @@
 package models;
 
+import java.util.Arrays;
+
 public class MinimumSpanningTree {
+    Graph graph;
+    Edge[] edge;
     int[][] adjacencyMatrix;
     int startPrimIndex = 0;
 
-    public MinimumSpanningTree(int[][] graph) {
-        this.adjacencyMatrix = graph;
+    public MinimumSpanningTree(Graph graph) {
+        this.graph = graph;
+        edge = new Edge[graph.edges.size()];
+        for (int i = 0; i < graph.edges.size(); ++i)
+            edge[i] = graph.edges.get(i);
         this.printKruskal();
     }
 
@@ -16,7 +23,7 @@ public class MinimumSpanningTree {
     }
 
     // A utility function to print the constructed MST stored in parent[]
-    void printMST(int[] parent, int[][] graph) {
+    void printMSTPrim(int[] parent, int[][] graph) {
         System.out.println("Edge \tWeight");
         for (int i = 1; i < graph.length; i++)
             System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
@@ -78,12 +85,94 @@ public class MinimumSpanningTree {
                     key[v] = adjacencyMatrix[u][v];
                 }
         }
-        printMST(parent, adjacencyMatrix);
+        printMSTPrim(parent, adjacencyMatrix);
         System.out.println("-----------------");
+    }
+
+    // A class to represent a subset for union-find (kruskal)
+    class subset {
+        int parent, rank;
+    };
+
+    // A utility function to find set of an element i (uses path compression technique)
+    // path compression technique: since each element visited on the way to a root is part of the same set, all of these visited elements can be reattached directly to the root.
+    int find(subset[] subsets, int i) {
+        // find root and make root as parent of i (path compression)
+        if (subsets[i].parent != i)
+            subsets[i].parent = find(subsets, subsets[i].parent);
+
+        return subsets[i].parent;
+    }
+
+    // A function that does union of two sets of x and y (uses union by rank)
+    void Union(subset subsets[], int x, int y) {
+        int xroot = find(subsets, x);
+        int yroot = find(subsets, y);
+
+        // Attach smaller rank tree under root of high rank tree
+        // (Union by Rank)
+        if (subsets[xroot].rank < subsets[yroot].rank)
+            subsets[xroot].parent = yroot;
+        else if (subsets[xroot].rank > subsets[yroot].rank)
+            subsets[yroot].parent = xroot;
+
+            // If ranks are same, then make one as root and increment
+            // its rank by one
+        else
+        {
+            subsets[yroot].parent = xroot;
+            subsets[xroot].rank++;
+        }
     }
 
     void printKruskal() {
         System.out.println("----- MST KRUSKAL -----");
+
+        Edge[] result = new Edge[graph.verticesNumber];  // This will store the resultant MST
+        int e = 0;  // An index variable, used for result[]
+        int i = 0;  // An index variable, used for sorted edges
+        for (i = 0; i < graph.verticesNumber; ++i)
+            result[i] = new Edge(0);
+
+        // Step 1:  Sort all the edges in non-decreasing order of their weight.
+        // If we are not allowed to change the given graph, we can create a copy of array of edges
+        Arrays.sort(edge);
+
+        // Allocate memory for creating adjacencyMatrix.length subsets
+        subset[] subsets = new subset[graph.verticesNumber];
+        for (i = 0; i < graph.verticesNumber; ++i)
+            subsets[i] = new subset();
+
+        // Create V subsets with single elements
+        for (int v = 0; v < graph.verticesNumber; ++v) {
+            subsets[v].parent = v;
+            subsets[v].rank = 0;
+        }
+
+        i = 0;  // Index used to pick next edge
+
+        // Number of edges to be taken is equal to V-1
+        while (e < graph.verticesNumber - 1) {
+            // Step 2: Pick the smallest edge and increment the index for next iteration
+            Edge next_edge = new Edge(0);
+            next_edge = edge[i++];
+
+            // x = source and y = destination
+            int x = find(subsets, next_edge.vertices.get(0).getValue() - 1);
+            int y = find(subsets, next_edge.vertices.get(1).getValue() - 1);
+
+            // If including this edge does't cause cycle, include it in result and increment the index of result for next edge
+            if (x != y) {
+                result[e++] = next_edge;
+                Union(subsets, x, y);
+            }
+            // Else discard the next_edge
+        }
+
+        System.out.print("" + "Edge    \tWeight\n");
+        for (i = 0; i < e; ++i) {
+            System.out.println((result[i].vertices.get(0).getValue() - 1) + " - " + (result[i].vertices.get(1).getValue() - 1) + "      " + result[i].weight);
+        }
 
         System.out.println("-----------------");
     }

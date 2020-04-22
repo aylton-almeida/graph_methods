@@ -21,6 +21,10 @@ public class Main {
 //        g.printMinimumSpanningTree(0);
 
         System.out.println("Kruskal's Expected Output");
+        System.out.println("Edge \tWeight\n" +
+                "2 - 3   4\n" +
+                "0 - 3   5\n" +
+                "0 - 1   10");
         System.out.println("-------------------------");
 
         FileManager fm = new FileManager("kruskalExample.txt");
