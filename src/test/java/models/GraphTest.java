@@ -74,7 +74,6 @@ class GraphTest {
 
         assertTrue(this.graph.vertices.contains(new Vertice(1)), "should return that it contains the vertice");
         assertTrue(this.graph.isIsolated(new Vertice(1)), "should return that the vertice is isolated");
-
     }
 
     @Test

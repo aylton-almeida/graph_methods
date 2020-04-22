@@ -55,7 +55,6 @@ public class Graph {
         return isAdjacent;
     }
 
-
     /**
      * Returns the degree for the given vertice
      *
@@ -68,18 +67,12 @@ public class Graph {
                 : -1;
     }
 
-
-
-
-
     /**
-     * Returns true or false
+     * if the graph is eulerian or not, that is, if all it's vertices has degree 2
      *
-     * @return true if the graph is eurelian  or false
-     * if the graph is not eurelian
+     * @return returns true or false
      */
     public boolean isEulerian() {
-
         for (Vertice vertice : vertices) {
             if (getDegree(vertice) % 2 != 0) {
                 return false;
@@ -93,9 +86,10 @@ public class Graph {
         return this.getDegree(v1) == 0;
     }
 
-
     /**
-     * @return
+     * Returns if the graph has a eulerian path, that is, only two vertices with even degree
+     *
+     * @return if the graph is unicursal
      */
     public boolean isUnicursal() {
         int cont = 0;
@@ -107,13 +101,13 @@ public class Graph {
         return cont == 2;
     }
 
-    public Graph getComplementar() {
+    public Graph getComplementary() {
         Graph graph2 = new Graph(verticesNumber);
 
         for (Vertice vertice : vertices) {
             for (Vertice vertice1 : vertices) {
 
-                if (isAdjacent(vertice, vertice1) != true && vertice != vertice1) {
+                if (!isAdjacent(vertice, vertice1) && vertice != vertice1) {
                     graph2.addEdgeFromString("vertice;vertice1");
                 }
             }
