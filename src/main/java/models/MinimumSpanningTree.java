@@ -8,6 +8,7 @@ public class MinimumSpanningTree {
     int[][] adjacencyMatrix;
     int startPrimIndex = 0;
 
+    // get MST with Kruskal's algorithm
     public MinimumSpanningTree(Graph graph) {
         this.graph = graph;
         edge = new Edge[graph.edges.size()];
@@ -16,6 +17,12 @@ public class MinimumSpanningTree {
         this.printKruskal();
     }
 
+    // get MST with Prim's algorithm
+    /**
+     * create MST with Prim's algorithm
+     *
+     * @param v1 start vertice
+     */
     public MinimumSpanningTree(int[][] graph, int v1) {
         this.adjacencyMatrix = graph;
         this.startPrimIndex = v1;
@@ -125,6 +132,7 @@ public class MinimumSpanningTree {
         }
     }
 
+    // get MST with Kruskal
     void printKruskal() {
         System.out.println("----- MST KRUSKAL -----");
 
@@ -169,6 +177,7 @@ public class MinimumSpanningTree {
             // Else discard the next_edge
         }
 
+        // prints MST
         System.out.print("" + "Edge    \tWeight\n");
         for (i = 0; i < e; ++i) {
             System.out.println((result[i].vertices.get(0).getValue() - 1) + " - " + (result[i].vertices.get(1).getValue() - 1) + "      " + result[i].weight);

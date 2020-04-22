@@ -265,8 +265,7 @@ public class Graph {
 
         for (Vertice v : adjList) {
             int index = v.getValue() - 1;
-            if(!visited[index]){
-                //make recursive call from neighbor
+            if (!visited[index]) {
                 DepthFirstSearch(index, visited);
             }
         }
@@ -283,6 +282,7 @@ public class Graph {
         //created visited array
         boolean[] visited = new boolean[vertices];
 
+        // start from vertice 0
         DepthFirstSearch(0, visited);
 
         //check if all the vertices are visited, if yes then graph is connected
