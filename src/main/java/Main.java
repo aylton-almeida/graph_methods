@@ -8,6 +8,6 @@ public class Main {
         FileManager f = new FileManager("nonDirectedGraph.txt");
         Graph g = new Graph(5);
         g = f.readNonDirectedGraphFile();
-        g.printAdjMatrix();
+        g.printMinimumSpanningTree(0);
     }
 }

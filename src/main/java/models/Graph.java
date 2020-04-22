@@ -9,17 +9,20 @@ public class Graph {
     int verticesNumber;
     final List<Vertice> vertices = new ArrayList<>();
     final List<Edge> edges = new ArrayList<>();
-//    MinimumSpanningTree minimumSpanningTree;
+    MinimumSpanningTree minimumSpanningTree;
     int[][] adjMatrix;
 
     public void setVerticesNumber(int verticesNumber) {
         this.verticesNumber = verticesNumber;
     }
 
-//    public MinimumSpanningTree getMinimumSpanningTree(Vertice v1) {
-//        this.minimumSpanningTree = new MinimumSpanningTree(this.getAdjMatrix(), v1);
-//        return this.minimumSpanningTree;
-//    }
+    public void printMinimumSpanningTree() {
+        this.minimumSpanningTree = new MinimumSpanningTree(this.getAdjMatrix());
+    }
+
+    public void printMinimumSpanningTree(int v1) {
+        this.minimumSpanningTree = new MinimumSpanningTree(this.getAdjMatrix(), this.vertices.get(v1).getValue());
+    }
 
     public Graph(int verticesNumber) {
         this.setVerticesNumber(verticesNumber);
@@ -31,13 +34,14 @@ public class Graph {
     }
 
     void addEdgeToAdjMatrix(Edge e) {
-        adjMatrix[e.vertices.get(0).getValue() - 1][e.vertices.get(1).getValue() - 1] = 1;
-        adjMatrix[e.vertices.get(1).getValue() - 1][e.vertices.get(0).getValue() - 1] = 1;
+        adjMatrix[e.vertices.get(0).getValue() - 1][e.vertices.get(1).getValue() - 1] = e.weight;
+        adjMatrix[e.vertices.get(1).getValue() - 1][e.vertices.get(0).getValue() - 1] = e.weight;
     }
 
     public void printAdjMatrix() {
         StringBuilder s = new StringBuilder();
 
+        System.out.println("--- adjacency matrix ---");
         System.out.print("   ");
         for (int i = 0; i < verticesNumber; i++)
             System.out.print(i + " ");
@@ -51,6 +55,7 @@ public class Graph {
             s.append("\n");
         }
         System.out.println(s.toString());
+        System.out.println("--------------");
     }
 
     /**
