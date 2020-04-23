@@ -1,6 +1,5 @@
 package models;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.Objects;
@@ -10,18 +9,62 @@ public class Graph {
     int verticesNumber;
     final List<Vertice> vertices = new ArrayList<>();
     final List<Edge> edges = new ArrayList<>();
+    MinimumSpanningTree minimumSpanningTree;
+    int[][] adjMatrix;
 
     public void setVerticesNumber(int verticesNumber) {
         this.verticesNumber = verticesNumber;
+        adjMatrix = new int[verticesNumber][verticesNumber];
     }
 
     Graph(int verticesNumber, List<Vertice> vertices) {
-        this.verticesNumber = verticesNumber;
+        setVerticesNumber(verticesNumber);
         this.vertices.addAll(vertices);
     }
 
     public Graph(int verticesNumber) {
         this.setVerticesNumber(verticesNumber);
+        adjMatrix = new int[verticesNumber][verticesNumber];
+    }
+
+    // print minimum spanning tree - kruskal's algorithm
+    public void printMinimumSpanningTree() {
+        if (this.isConnected())
+            this.minimumSpanningTree = new MinimumSpanningTree(this);
+        else
+            System.out.println("Cannot print MST - Kruskal because the graph is not connected");
+    }
+
+    // print minimum spanning tree - prim's algorithm
+    public void printMinimumSpanningTree(int v1) {
+        if (this.isConnected())
+            this.minimumSpanningTree = new MinimumSpanningTree(this.adjMatrix, this.vertices.indexOf(this.vertices.get(v1)));
+        else
+            System.out.println("Cannot print MST - Prim because the graph is not connected");
+    }
+
+    void addEdgeToAdjMatrix(Edge e) {
+        adjMatrix[e.vertices.get(0).getValue() - 1][e.vertices.get(1).getValue() - 1] = e.weight;
+        adjMatrix[e.vertices.get(1).getValue() - 1][e.vertices.get(0).getValue() - 1] = e.weight;
+//        adjMatrix[this.vertices.indexOf(e.vertices.get(0))][this.vertices.indexOf(e.vertices.get(1))] = e.weight;
+//        adjMatrix[this.vertices.indexOf(e.vertices.get(1))][this.vertices.indexOf(e.vertices.get(0))] = e.weight;
+    }
+
+    // utility function to print adjacency matrix
+    public void printAdjMatrix() {
+
+        System.out.print("\t");
+        for (int i = 0; i < adjMatrix.length; i++)
+            System.out.print("\t" + i + "\t");
+        System.out.println("");
+        System.out.println("\t\t-------------------------------------------------------------");
+        for (int i = 0; i < adjMatrix.length; i++) {
+            System.out.print(i + "\t|\t");//this equals to the row in our matrix.
+            for (int j = 0; j < adjMatrix[i].length; j++) {   //this equals to the column in each row.
+                System.out.print(adjMatrix[i][j] + "\t\t");
+            }
+            System.out.println(); //change line on console as row comes to end in the matrix.
+        }
     }
 
     /**
@@ -30,8 +73,10 @@ public class Graph {
      * @param edgeString edge string
      */
     public void addEdgeFromString(String edgeString) {
-        this.edges.add(new Edge(edgeString));
+        Edge e = new Edge(edgeString);
+        this.edges.add(e);
         this.updateVertices();
+        this.addEdgeToAdjMatrix(e);
     }
 
     /**
@@ -323,7 +368,6 @@ public class Graph {
         for (Vertice v : adjList) {
             int index = this.vertices.indexOf(v);
             if (!visited[index]) {
-                //make recursive call from neighbor
                 DepthFirstSearch(index, visited);
             }
         }
@@ -338,6 +382,7 @@ public class Graph {
         //created visited array
         boolean[] visited = new boolean[verticesNumber];
 
+        // start from vertice 0
         DepthFirstSearch(0, visited);
 
         //check if all the vertices are visited, if yes then graph is connected

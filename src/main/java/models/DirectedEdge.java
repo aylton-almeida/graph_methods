@@ -12,7 +12,7 @@ public class DirectedEdge extends Edge {
      * @param fileString String from file
      */
     DirectedEdge(String fileString) {
-        super(Double.parseDouble(fileString.split(";")[2]));
+        super(Integer.parseInt(fileString.split(";")[2]));
 
         String[] strings = fileString.split(";");
         if (strings[3].equals("1")) {
@@ -31,7 +31,7 @@ public class DirectedEdge extends Edge {
      * @param v1     first vertice
      * @param v2     second vertice
      */
-    DirectedEdge(double weight, int v1, int v2) {
+    DirectedEdge(int weight, int v1, int v2) {
         super(weight);
         this.vertices.add(new Vertice(v1));
         this.vertices.add(new Vertice(v2));

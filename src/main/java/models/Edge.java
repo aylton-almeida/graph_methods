@@ -2,15 +2,15 @@ package models;
 
 import java.util.*;
 
-public class Edge {
+public class Edge implements Comparable<Edge> {
     final List<Vertice> vertices = new ArrayList<>(); // Should never be bigger than 2
-    final double weight;
+    final int weight;
 
     /**
      * Default Constructor
      * @param weight Value needed to run the edge
      */
-    Edge(Double weight) {this.weight = weight;}
+    Edge(Integer weight) {this.weight = weight;}
 
     /**
      * Creates edge from values
@@ -19,7 +19,7 @@ public class Edge {
      * @param v1     first vertice
      * @param v2     second vertice
      */
-    Edge(double weight, int v1, int v2) {
+    Edge(int weight, int v1, int v2) {
         this.vertices.add(new Vertice(v1));
         this.vertices.add(new Vertice(v2));
         this.weight = weight;
@@ -46,7 +46,7 @@ public class Edge {
         String[] strings = fileString.split(";");
         this.vertices.add(new Vertice(Integer.parseInt(strings[0].strip())));
         this.vertices.add(new Vertice(Integer.parseInt(strings[1].strip())));
-        this.weight = Double.parseDouble(strings[2]);
+        this.weight = Integer.parseInt(strings[2]);
     }
 
     /**
@@ -83,6 +83,10 @@ public class Edge {
         Collections.reverse(vertices);
         boolean isReverseOrderEqual = vertices.equals(e.vertices);
         return isNormalOrderEqual || isReverseOrderEqual;
+    }
+
+    public int compareTo(Edge compareEdge) {
+        return this.weight - compareEdge.weight;
     }
 
     @Override
