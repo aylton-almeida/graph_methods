@@ -1,6 +1,7 @@
 package models;
 
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -12,6 +13,11 @@ public class Graph {
 
     public void setVerticesNumber(int verticesNumber) {
         this.verticesNumber = verticesNumber;
+    }
+
+    Graph(int verticesNumber, List<Vertice> vertices) {
+        this.verticesNumber = verticesNumber;
+        this.vertices.addAll(vertices);
     }
 
     public Graph(int verticesNumber) {
@@ -29,6 +35,31 @@ public class Graph {
     }
 
     /**
+     * Add edge to graph from 2 edges
+     *
+     * @param v1 first edge
+     * @param v2 second edge
+     */
+    void addEdge(Vertice v1, Vertice v2) {
+        this.edges.add(new Edge(v1, v2));
+        this.updateVertices();
+    }
+
+    /**
+     * Checks if edge is inside edges list ignoring its weight
+     *
+     * @param e edge to be checked
+     * @return if the edge is inside the edges list ignoring it's weight
+     */
+    boolean edgesContainsIgnoringWeight(Edge e) {
+        boolean contains = false;
+        for (Edge edge : this.edges)
+            if (edge.equalsIgnoreWeight(e))
+                contains = true;
+        return contains;
+    }
+
+    /**
      * Add isolated vertice
      *
      * @param v1 vertice to be added
@@ -38,12 +69,30 @@ public class Graph {
     }
 
     /**
+     * Removes vertices from graph
+     *
+     * @param v vertice to be removed
+     * @return list of edges removed
+     */
+    List<Edge> removeVertice(Vertice v) {
+        List<Edge> toBeRemovedEdges = new ArrayList<>();
+        for (Edge e : this.edges) {
+            if (e.vertices.contains(v)) {
+                toBeRemovedEdges.add(e);
+            }
+        }
+        this.edges.removeAll(toBeRemovedEdges);
+        return toBeRemovedEdges;
+    }
+
+    /**
      * Update vertices list
      */
     public void updateVertices() {
         this.edges.forEach(e -> e.vertices.forEach(v -> {
             if (!this.vertices.contains(v)) this.vertices.add(v);
         }));
+        this.vertices.sort(Vertice::compareTo);
     }
 
     /**
@@ -76,8 +125,62 @@ public class Graph {
                 : -1;
     }
 
+    /**
+     * if the graph is eulerian or not, that is, if all it's vertices has degree 2
+     *
+     * @return returns true or false
+     */
+    public boolean isEulerian() {
+        for (Vertice vertice : vertices) {
+            if (getDegree(vertice) % 2 != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Returns if the vertice is isolated in this graph
+     *
+     * @param v1 vertice to be tested
+     * @return true or false accordingly
+     */
     boolean isIsolated(Vertice v1) {
         return this.getDegree(v1) == 0;
+    }
+
+    /**
+     * Returns if the graph has a eulerian path, that is, only two vertices with odd degree
+     *
+     * @return if the graph is unicursal
+     */
+    public boolean isUnicursal() {
+        int cont = 0;
+        for (Vertice vertice : vertices) {
+            if (getDegree(vertice) % 2 != 0) {
+                cont++;
+            }
+        }
+        return cont == 2;
+    }
+
+    /**
+     * Given two graphs with the same vertices, the complementary of the first graph will have all
+     * edges it didn't have
+     *
+     * @return the complementary Graph from this
+     */
+    public Graph getComplementary() {
+        Graph newGraph = new Graph(verticesNumber, this.vertices);
+
+        for (Vertice v1 : this.vertices)
+            for (Vertice v2 : this.vertices)
+                if (!v1.equals(v2)
+                        && !this.edgesContainsIgnoringWeight(new Edge(v1, v2))
+                        && !newGraph.edges.contains(new Edge(v1, v2)))
+                    newGraph.addEdge(v1, v2);
+
+        return newGraph;
     }
 
     /**
@@ -203,22 +306,23 @@ public class Graph {
     /**
      * Depth-first search
      */
-    void DepthFirstSearch(int source, boolean[] visited){
+    void DepthFirstSearch(int source, boolean[] visited) {
 
         //mark the vertice as visited
         visited[source] = true;
 
         List<Vertice> adjList = this.edges
                 .stream()
-                .filter(e -> e.vertices.get(0)
-                        .equals(this.vertices.get(source))
-                )
-                .map(e -> e.vertices.get(1))
+                .filter(e -> e.vertices.contains(this.vertices.get(source)))
+                .map(e -> {
+                    int i = e.vertices.indexOf(this.vertices.get(source));
+                    return i == 0 ? e.vertices.get(1) : e.vertices.get(0);
+                })
                 .collect(Collectors.toList());
 
         for (Vertice v : adjList) {
-            int index = v.getValue() - 1;
-            if(!visited[index]){
+            int index = this.vertices.indexOf(v);
+            if (!visited[index]) {
                 //make recursive call from neighbor
                 DepthFirstSearch(index, visited);
             }
@@ -231,10 +335,8 @@ public class Graph {
      * @return if the graph is connected or not
      */
     public boolean isConnected() {
-        int vertices = this.vertices.size();
-
         //created visited array
-        boolean[] visited = new boolean[vertices];
+        boolean[] visited = new boolean[verticesNumber];
 
         DepthFirstSearch(0, visited);
 
@@ -244,7 +346,27 @@ public class Graph {
             if (b)
                 count++;
         }
-        return vertices == count;
+        return verticesNumber == count;
+    }
+
+    /**
+     * Get the number of cut vertices in the graph
+     *
+     * @return the number of cut vertices
+     */
+    int getCutVertices() {
+        int countVertices = 0;
+        for (int i = 0; i < this.vertices.size(); i++) {
+            Vertice v = this.vertices.get(i);
+            List<Edge> removedEdges = this.removeVertice(v);
+            this.setVerticesNumber(--verticesNumber);
+            this.vertices.remove(v);
+            if (!this.isConnected()) countVertices++;
+            this.edges.addAll(removedEdges);
+            this.setVerticesNumber(++verticesNumber);
+            this.vertices.add(0, v);
+        }
+        return countVertices;
     }
 
     @Override
@@ -260,5 +382,14 @@ public class Graph {
     @Override
     public int hashCode() {
         return Objects.hash(verticesNumber, vertices, edges);
+    }
+
+    @Override
+    public String toString() {
+        return "Graph{" +
+                "verticesNumber=" + verticesNumber +
+                ", vertices=" + vertices +
+                ", edges=" + edges +
+                '}';
     }
 }
