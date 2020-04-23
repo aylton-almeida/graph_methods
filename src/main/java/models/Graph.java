@@ -14,10 +14,11 @@ public class Graph {
 
     public void setVerticesNumber(int verticesNumber) {
         this.verticesNumber = verticesNumber;
+        adjMatrix = new int[verticesNumber][verticesNumber];
     }
 
     Graph(int verticesNumber, List<Vertice> vertices) {
-        this.verticesNumber = verticesNumber;
+        setVerticesNumber(verticesNumber);
         this.vertices.addAll(vertices);
     }
 
@@ -49,23 +50,19 @@ public class Graph {
 
     // utility function to print adjacency matrix
     public void printAdjMatrix() {
-        StringBuilder s = new StringBuilder();
 
-        System.out.println("--- adjacency matrix ---");
-        System.out.print("   ");
-        for (int i = 0; i < verticesNumber; i++)
-            System.out.print(i + " ");
+        System.out.print("\t");
+        for (int i = 0; i < adjMatrix.length; i++)
+            System.out.print("\t" + i + "\t");
         System.out.println("");
-
-        for (int i = 0; i < verticesNumber; i++) {
-            s.append(i + ": ");
-            for (int j : adjMatrix[i]) {
-                s.append((j == 1?1:0) + " ");
+        System.out.println("\t\t-------------------------------------------------------------");
+        for (int i = 0; i < adjMatrix.length; i++) {
+            System.out.print(i + "\t|\t");//this equals to the row in our matrix.
+            for (int j = 0; j < adjMatrix[i].length; j++) {   //this equals to the column in each row.
+                System.out.print(adjMatrix[i][j] + "\t\t");
             }
-            s.append("\n");
+            System.out.println(); //change line on console as row comes to end in the matrix.
         }
-        System.out.println(s.toString());
-        System.out.println("--------------");
     }
 
     /**
@@ -76,8 +73,8 @@ public class Graph {
     public void addEdgeFromString(String edgeString) {
         Edge e = new Edge(edgeString);
         this.edges.add(e);
-        this.addEdgeToAdjMatrix(e);
         this.updateVertices();
+        this.addEdgeToAdjMatrix(e);
     }
 
     /**

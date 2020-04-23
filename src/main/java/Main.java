@@ -18,6 +18,7 @@ public class Main {
         FileManager f = new FileManager("primExample.txt");
         Graph g = new Graph(5);
         g = f.readNonDirectedGraphFile();
+//        g.printAdjMatrix();
         g.printMinimumSpanningTree(0);
 
 //        System.out.println("Kruskal's Expected Output");

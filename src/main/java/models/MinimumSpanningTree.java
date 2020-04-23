@@ -83,7 +83,7 @@ public class MinimumSpanningTree {
 
             // Update key value and parent index of the adjacent vertices of the picked vertex.
             // Consider only those vertices which are not yet included in MST
-            for (int v = 0; v < adjacencyMatrix.length; v++)
+            for (int v = 0; v < adjacencyMatrix.length - 1; v++)
                 // graph[u][v] is non zero only for adjacent vertices of m
                 // mstSet[v] is false for vertices not yet included in MST
                 // Update the key only if graph[u][v] is smaller than key[v]
@@ -166,8 +166,8 @@ public class MinimumSpanningTree {
             next_edge = edge[i++];
 
             // x = source and y = destination
-            int x = find(subsets, next_edge.vertices.get(0).getValue() - 1);
-            int y = find(subsets, next_edge.vertices.get(1).getValue() - 1);
+            int x = find(subsets, graph.vertices.indexOf(next_edge.vertices.get(0)));
+            int y = find(subsets, graph.vertices.indexOf(next_edge.vertices.get(1)));
 
             // If including this edge does't cause cycle, include it in result and increment the index of result for next edge
             if (x != y) {
@@ -180,7 +180,7 @@ public class MinimumSpanningTree {
         // prints MST
         System.out.print("" + "Edge    \tWeight\n");
         for (i = 0; i < e; ++i) {
-            System.out.println((result[i].vertices.get(0).getValue() - 1) + " - " + (result[i].vertices.get(1).getValue() - 1) + "      " + result[i].weight);
+            System.out.println((graph.vertices.indexOf(result[i].vertices.get(0))) + " - " + (graph.vertices.indexOf(result[i].vertices.get(1))) + "      " + result[i].weight);
         }
 
         System.out.println("-----------------");
