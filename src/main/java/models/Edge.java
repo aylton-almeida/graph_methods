@@ -1,9 +1,6 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Edge implements Comparable<Edge> {
     final List<Vertice> vertices = new ArrayList<>(); // Should never be bigger than 2

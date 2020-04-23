@@ -2,7 +2,7 @@ package models;
 
 import java.util.Objects;
 
-public class Vertice {
+public class Vertice implements Comparable<Vertice>{
     final String name;
 
     /**
@@ -12,10 +12,6 @@ public class Vertice {
      */
     Vertice(int number) {
         this.name = "v" + number;
-    }
-
-    int getValue() {
-        return Integer.parseInt(this.name.replace("v", "").trim());
     }
 
     /**
@@ -43,5 +39,10 @@ public class Vertice {
         return "Vertice{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Vertice o) {
+        return Integer.compare(this.name.charAt(1), o.name.charAt(1));
     }
 }
