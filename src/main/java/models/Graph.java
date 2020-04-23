@@ -1,6 +1,6 @@
 package models;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -137,7 +137,14 @@ public class Graph {
         this.edges.forEach(e -> e.vertices.forEach(v -> {
             if (!this.vertices.contains(v)) this.vertices.add(v);
         }));
+
         this.vertices.sort(Vertice::compareTo);
+    }
+
+    public void finalVertice() {
+        int isolatedVertices = this.verticesNumber - this.vertices.size();
+        for (int i = 1; i <= isolatedVertices; i++)
+            this.vertices.add(new Vertice(this.vertices.size() + i));
     }
 
     /**
@@ -164,7 +171,7 @@ public class Graph {
      * @param v1 vertice to be analyzed
      * @return vertice degree or -1 if vertice is not part of the graph
      */
-    int getDegree(Vertice v1) {
+    public int getDegree(Vertice v1) {
         return this.vertices.contains(v1)
                 ? (int) this.edges.stream().filter(edge -> edge.vertices.contains(v1)).count()
                 : -1;
@@ -181,7 +188,7 @@ public class Graph {
                 return false;
             }
         }
-        return true;
+        return this.isConnected();
     }
 
     /**
@@ -190,7 +197,7 @@ public class Graph {
      * @param v1 vertice to be tested
      * @return true or false accordingly
      */
-    boolean isIsolated(Vertice v1) {
+    public boolean isIsolated(Vertice v1) {
         return this.getDegree(v1) == 0;
     }
 
@@ -206,7 +213,7 @@ public class Graph {
                 cont++;
             }
         }
-        return cont == 2;
+        return cont == 2 && this.isConnected();
     }
 
     /**
@@ -244,17 +251,20 @@ public class Graph {
      * @return if the graph is regular or not
      */
     public boolean isRegular() {
-        List<Integer> degrees = new ArrayList<>();
-        this.vertices.forEach(vertice -> degrees.add(this.getDegree(vertice)));
-        boolean isRegular = true;
-        int firstDegree = degrees.get(0);
-        for (int degree : degrees) {
-            if (degree != firstDegree) {
-                isRegular = false;
-                break;
+        if (!this.isNull()){
+            List<Integer> degrees = new ArrayList<>();
+            this.vertices.forEach(vertice -> degrees.add(this.getDegree(vertice)));
+            boolean isRegular = true;
+            int firstDegree = degrees.get(0);
+            for (int degree : degrees) {
+                if (degree != firstDegree) {
+                    isRegular = false;
+                    break;
+                }
             }
+            return isRegular;
         }
-        return isRegular;
+        return false;
     }
 
     /**
@@ -399,7 +409,7 @@ public class Graph {
      *
      * @return the number of cut vertices
      */
-    int getCutVertices() {
+    public int getCutVertices() {
         int countVertices = 0;
         for (int i = 0; i < this.vertices.size(); i++) {
             Vertice v = this.vertices.get(i);

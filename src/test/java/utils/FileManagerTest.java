@@ -2,12 +2,11 @@ package utils;
 
 import models.DirectedGraph;
 import models.Graph;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FileManagerTest {
     FileManager fileManager;

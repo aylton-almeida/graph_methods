@@ -10,7 +10,7 @@ public class Vertice implements Comparable<Vertice>{
      *
      * @param number vertice id
      */
-    Vertice(int number) {
+    public Vertice(int number) {
         this.name = "v" + number;
     }
 

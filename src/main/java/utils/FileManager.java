@@ -1,10 +1,12 @@
 package utils;
 
 import models.DirectedGraph;
-import models.Edge;
 import models.Graph;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Objects;
 
 public class FileManager {
@@ -36,6 +38,7 @@ public class FileManager {
             String line;
             while ((line = br.readLine()) != null)
                 graph.addEdgeFromString(line);
+            graph.finalVertice();
         } finally {
             assert br != null;
             br.close();

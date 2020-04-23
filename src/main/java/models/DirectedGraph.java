@@ -1,7 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -40,7 +39,7 @@ public class DirectedGraph {
      * @param v1 vertice to be analyzed
      * @return the entry degree -1 if vertice is not part of the graph
      */
-    int getEntryDegree(Vertice v1) {
+    public int getEntryDegree(Vertice v1) {
         return this.vertices.contains(v1)
                 ? (int) this.edges.stream().filter(e -> e.vertices.get(1).equals(v1)).count()
                 : -1;
@@ -52,7 +51,7 @@ public class DirectedGraph {
      * @param v1 vertice to be analyzed
      * @return the exit degree -1 if vertice is not part of the graph
      */
-    int getExitDegree(Vertice v1) {
+    public int getExitDegree(Vertice v1) {
         return this.vertices.contains(v1)
                 ? (int) this.edges.stream().filter(e -> e.vertices.get(0).equals(v1)).count()
                 : -1;
@@ -63,7 +62,7 @@ public class DirectedGraph {
      *
      * @return if it has a cycle
      */
-    boolean hasCycle() {
+    public boolean hasCycle() {
         //Visited and Stack arrays
         boolean[] visited = new boolean[verticesNumber];
         boolean[] recStack = new boolean[verticesNumber];
