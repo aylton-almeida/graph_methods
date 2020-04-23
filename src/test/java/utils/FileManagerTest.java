@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class FileManagerTest {
     FileManager fileManager;
 
+    // it will crash because nonDirectedGraph file has changed
     @Test
     void readNonDirectedGraphFile() {
         fileManager = new FileManager("nonDirectedGraph.txt");

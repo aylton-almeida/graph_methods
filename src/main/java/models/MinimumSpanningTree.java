@@ -83,7 +83,7 @@ public class MinimumSpanningTree {
 
             // Update key value and parent index of the adjacent vertices of the picked vertex.
             // Consider only those vertices which are not yet included in MST
-            for (int v = 0; v < adjacencyMatrix.length - 1; v++)
+            for (int v = 0; v < adjacencyMatrix.length; v++)
                 // graph[u][v] is non zero only for adjacent vertices of m
                 // mstSet[v] is false for vertices not yet included in MST
                 // Update the key only if graph[u][v] is smaller than key[v]

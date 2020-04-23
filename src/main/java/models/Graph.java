@@ -44,8 +44,10 @@ public class Graph {
     }
 
     void addEdgeToAdjMatrix(Edge e) {
-        adjMatrix[this.vertices.indexOf(e.vertices.get(0))][this.vertices.indexOf(e.vertices.get(1))] = e.weight;
-        adjMatrix[this.vertices.indexOf(e.vertices.get(1))][this.vertices.indexOf(e.vertices.get(0))] = e.weight;
+        adjMatrix[e.vertices.get(0).getValue() - 1][e.vertices.get(1).getValue() - 1] = e.weight;
+        adjMatrix[e.vertices.get(1).getValue() - 1][e.vertices.get(0).getValue() - 1] = e.weight;
+//        adjMatrix[this.vertices.indexOf(e.vertices.get(0))][this.vertices.indexOf(e.vertices.get(1))] = e.weight;
+//        adjMatrix[this.vertices.indexOf(e.vertices.get(1))][this.vertices.indexOf(e.vertices.get(0))] = e.weight;
     }
 
     // utility function to print adjacency matrix

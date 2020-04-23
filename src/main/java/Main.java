@@ -18,19 +18,18 @@ public class Main {
         FileManager f = new FileManager("primExample.txt");
         Graph g = new Graph(5);
         g = f.readNonDirectedGraphFile();
-//        g.printAdjMatrix();
         g.printMinimumSpanningTree(0);
 
-//        System.out.println("Kruskal's Expected Output");
-//        System.out.println("Edge \tWeight\n" +
-//                "2 - 3   4\n" +
-//                "0 - 3   5\n" +
-//                "0 - 1   10");
-//        System.out.println("-------------------------");
-//
-//        FileManager fm = new FileManager("kruskalExample.txt");
-//        Graph gr = new Graph(5);
-//        gr = fm.readNonDirectedGraphFile();
-//        gr.printMinimumSpanningTree();
+        System.out.println("Kruskal's Expected Output");
+        System.out.println("Edge \tWeight\n" +
+                "2 - 3   4\n" +
+                "0 - 3   5\n" +
+                "0 - 1   10");
+        System.out.println("-------------------------");
+
+        FileManager fm = new FileManager("kruskalExample.txt");
+        Graph gr = new Graph(5);
+        gr = fm.readNonDirectedGraphFile();
+        gr.printMinimumSpanningTree();
     }
 }
