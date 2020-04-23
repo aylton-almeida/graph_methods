@@ -94,12 +94,15 @@ class GraphTest {
 
     @Test
     void isEulerian() {
+        this.graph.setVerticesNumber(3);
+
         this.graph.addEdgeFromString("1;2;0");
         this.graph.addEdgeFromString("1;3;0");
         this.graph.addEdgeFromString("2;3;0");
 
         assertTrue(this.graph.isEulerian(), "should return that graph is Eulerian");
 
+        this.graph.setVerticesNumber(4);
         this.graph.addEdgeFromString("2;4;0");
         assertFalse(this.graph.isEulerian(), "should return that graph is not Eulerian");
     }
